@@ -31,8 +31,6 @@ mvn spring-boot:run
 
 ## 📁 Estrutura do projeto
 
-## 📁 Estrutura do projeto
-
 - **ConsultafipeApplication.java** — inicialização da aplicação
 - **Main.java** — menu interativo e fluxo principal
 - **model/** — records para mapear os dados da API (modelo, valor, veículo)
