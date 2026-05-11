@@ -31,16 +31,9 @@ mvn spring-boot:run
 
 ## 📁 Estrutura do projeto
 
-src/main/java/br/com/consultafipe/
-├── ConsultafipeApplication.java   # Entry point Spring Boot
-├── Veiculo.java                   # Entidade veículo
-├── main/
-│   └── Main.java                  # Lógica principal (menu interativo)
-├── model/
-│   ├── DadosModelo.java           # Record para lista de modelos
-│   ├── DadosValor.java            # Record para valor FIPE
-│   └── DadosVeiculo.java          # Record para código/nome
-└── service/
-├── ConsumoApi.java            # Cliente HTTP
-├── ConverterDados.java        # Deserialização JSON
-└── IConverterDados.java       # Interface do conversor
+## 📁 Estrutura do projeto
+
+- **ConsultafipeApplication.java** — inicialização da aplicação
+- **Main.java** — menu interativo e fluxo principal
+- **model/** — records para mapear os dados da API (modelo, valor, veículo)
+- **service/** — consumo da API e conversão de JSON
