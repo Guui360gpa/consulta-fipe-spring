@@ -30,3 +30,17 @@ mvn spring-boot:run
 6. Veja o resumo com o **valor FIPE, marca, modelo, ano e combustível**
 
 ## 📁 Estrutura do projeto
+
+src/main/java/br/com/consultafipe/
+├── ConsultafipeApplication.java   # Entry point Spring Boot
+├── Veiculo.java                   # Entidade veículo
+├── main/
+│   └── Main.java                  # Lógica principal (menu interativo)
+├── model/
+│   ├── DadosModelo.java           # Record para lista de modelos
+│   ├── DadosValor.java            # Record para valor FIPE
+│   └── DadosVeiculo.java          # Record para código/nome
+└── service/
+├── ConsumoApi.java            # Cliente HTTP
+├── ConverterDados.java        # Deserialização JSON
+└── IConverterDados.java       # Interface do conversor
