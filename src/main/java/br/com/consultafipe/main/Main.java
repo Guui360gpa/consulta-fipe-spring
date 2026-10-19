@@ -1,17 +1,12 @@
-package br.com.consultafipe.main;
+/*package br.com.consultafipe.main;
 
-import br.com.consultafipe.model.DadosModelo;
-import br.com.consultafipe.model.DadosValor;
-import br.com.consultafipe.model.DadosVeiculo;
+import br.com.consultafipe.dto.DadosModelo;
+import br.com.consultafipe.dto.DadosValor;
+import br.com.consultafipe.dto.DadosVeiculo;
 import br.com.consultafipe.service.ConsumoApi;
 import br.com.consultafipe.service.ConverterDados;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
 
@@ -45,7 +40,7 @@ public class Main {
             System.out.println("!ERRO! Digite alguma das opções listadas");
         }
 
-        dados = conversor.obterListaDeDados(json, DadosVeiculo.class);
+        //dados = conversor.obterListaDeDados(json, DadosVeiculo.class);
 
         dados.forEach(v -> System.out.printf("[%s]  %s\n",v.codigo(),v.nome()));
 
@@ -75,7 +70,7 @@ public class Main {
         String codModelo = read.nextLine();
 
         json = consumoApi.obterDados(URI + tipoVeiculo + "/" + cod + "/modelos/" + codModelo + "/anos");
-        dados = conversor.obterListaDeDados(json,DadosVeiculo.class);
+        //dados = conversor.obterListaDeDados(json,DadosVeiculo.class);
 
         dados.forEach(m -> System.out.printf("[%s] %s\n",m.codigo(),m.nome()));
 
@@ -103,4 +98,4 @@ public class Main {
 
 
     }
-}
+}*/

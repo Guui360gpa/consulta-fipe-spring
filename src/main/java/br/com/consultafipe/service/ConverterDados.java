@@ -1,9 +1,12 @@
 package br.com.consultafipe.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
+@Service
 public class ConverterDados implements IConverterDados{
     private ObjectMapper mapper = new ObjectMapper();
 

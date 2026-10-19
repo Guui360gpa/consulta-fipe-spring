@@ -1,4 +1,4 @@
-package br.com.consultafipe.model;
+package br.com.consultafipe.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
