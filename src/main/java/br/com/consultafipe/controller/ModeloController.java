@@ -31,41 +31,47 @@ public class ModeloController {
         String tipoVeiculo = "carros/marcas";
         String json = consumoApi.obterDados(URI + tipoVeiculo);
 
-        List<DadosVeiculo> veiculos =
-                conversor.obterListaDeDados(
-                        json, DadosVeiculo.class
-                );
+        List<DadosVeiculo> veiculos = conversor.obterListaDeDados(json, DadosVeiculo.class);
 
-        veiculos.sort(Comparator.comparing(
-                DadosVeiculo::nome,
-                String.CASE_INSENSITIVE_ORDER
-        ));
+        veiculos.sort(Comparator.comparing(DadosVeiculo::nome, String.CASE_INSENSITIVE_ORDER));
 
         long offset = pageable.getOffset();
 
         if (offset >= veiculos.size()) {
-            return new PageImpl<>(
-                    List.of(), pageable, veiculos.size()
-            );
+            return new PageImpl<>(List.of(), pageable, veiculos.size());
         }
 
         int inicio = (int) offset;
-        int fim = (int) Math.min(
-                offset + pageable.getPageSize(),
-                veiculos.size()
-        );
 
-        return new PageImpl<>(
-                veiculos.subList(inicio, fim),
-                pageable,
-                veiculos.size()
-        );
+        int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
+
+        return new PageImpl<>(veiculos.subList(inicio, fim), pageable, veiculos.size());
     }
 
-/*    @GetMapping("/motorcycles")
+    @GetMapping("/motorcycles")
     public Page<DadosVeiculo> listMotorcycleModels(@PageableDefault(size = 10,sort = "nome") Pageable pageable) {
 
-    }*/
+        String tipoVeiculo = "motos/marcas";
+        String json = consumoApi.obterDados(URI + tipoVeiculo);
+
+        List<DadosVeiculo> veiculos = conversor.obterListaDeDados(json, DadosVeiculo.class);
+
+        veiculos.sort(Comparator.comparing(DadosVeiculo::nome, String.CASE_INSENSITIVE_ORDER));
+
+        long offset = pageable.getOffset();
+
+        if (offset >= veiculos.size()) {
+            return new PageImpl<>(List.of(),pageable,veiculos.size());
+        }
+
+        int inicio = (int) offset;
+
+        int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
+
+        return new PageImpl<>(veiculos.subList(inicio,fim),pageable,veiculos.size());
+    }
+
+
 
 
 }
