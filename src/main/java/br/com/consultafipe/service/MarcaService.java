@@ -55,14 +55,9 @@ public class MarcaService {
 
         String json = consumoApi.obterDados(endereco);
 
-        List<DadosMarca> marcas =
-                conversor.obterListaDeDados(
-                        json, DadosMarca.class
-                );
+        List<DadosMarca> marcas = conversor.obterListaDeDados(json, DadosMarca.class);
 
-        String pesquisa = nome.trim().toLowerCase(
-                Locale.ROOT
-        );
+        String pesquisa = nome.trim().toLowerCase(Locale.ROOT);
 
         if (pesquisa.isEmpty()) {
             return List.of();
