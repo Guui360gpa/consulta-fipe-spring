@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/anos")
@@ -35,7 +36,7 @@ public class AnoController {
         String json = consumoApi.obterDados(endereco);
 
         List<DadosAnoVeiculo> anoVeiculos = conversor.obterListaDeDados(json, DadosAnoVeiculo.class);
-        anoVeiculos.sort(Comparator.comparing(DadosAnoVeiculo::nome, String.CASE_INSENSITIVE_ORDER));
+        anoVeiculos.sort(Comparator.comparing(DadosAnoVeiculo::nome, String.CASE_INSENSITIVE_ORDER).reversed());
 
         long offset = pageable.getOffset();
 
@@ -49,5 +50,36 @@ public class AnoController {
 
         return new PageImpl<>(anoVeiculos.subList(inicio, fim), pageable, anoVeiculos.size());
 
+    }
+
+    @GetMapping("/{tipoVeiculo}/buscar")
+    public List<DadosAnoVeiculo> buscarPorNome(
+            @PathVariable String tipoVeiculo,
+            @RequestParam String codMarca,
+            @RequestParam String codModelo,
+            @RequestParam String nome
+    ){
+        String endereco = URI + tipoVeiculo + "/marcas/" + codMarca + "/modelos/" + codModelo + "/anos";
+
+        String json = consumoApi.obterDados(endereco);
+
+        List<DadosAnoVeiculo> anoVeiculos = conversor.obterListaDeDados(json, DadosAnoVeiculo.class);
+
+        String pesquisa = nome.trim().toLowerCase(Locale.ROOT);
+
+        if (pesquisa.isEmpty()) {
+            return List.of();
+        }
+
+        return anoVeiculos.stream()
+                .filter(ano -> ano.nome()
+                        .toLowerCase(Locale.ROOT)
+                        .contains(pesquisa))
+                .sorted(Comparator.comparing(
+                        DadosAnoVeiculo::nome,
+                        String.CASE_INSENSITIVE_ORDER
+                ).reversed())
+                .limit(10)
+                .toList();
     }
 }
