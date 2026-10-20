@@ -1,36 +1,25 @@
-package br.com.consultafipe.controller;
+package br.com.consultafipe.service;
 
 import br.com.consultafipe.dto.DadosAnoVeiculo;
-import br.com.consultafipe.dto.DadosMarca;
-import br.com.consultafipe.service.ConsumoApi;
-import br.com.consultafipe.service.ConverterDados;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-@RestController
-@RequestMapping("/anos")
+@Service
 @RequiredArgsConstructor
-public class AnoController {
+public class AnoModeloService {
 
     private final ConsumoApi consumoApi;
     private final ConverterDados conversor;
     private final String URI = "https://parallelum.com.br/fipe/api/v1/";
 
-    @GetMapping("/{tipoVeiculo}")
-    public Page<DadosAnoVeiculo> listar(
-            @PathVariable String tipoVeiculo,
-            @RequestParam String codMarca,
-            @RequestParam String codModelo,
-            @PageableDefault(size = 10,sort = "nome")Pageable pageable
-            ){
+    public Page<DadosAnoVeiculo> listarAnosModeloPorOrdemDecrescente(String tipoVeiculo, String codMarca, String codModelo, Pageable pageable){
 
         String endereco = URI + tipoVeiculo + "/marcas/" + codMarca + "/modelos/" + codModelo + "/anos";
         String json = consumoApi.obterDados(endereco);
@@ -52,13 +41,7 @@ public class AnoController {
 
     }
 
-    @GetMapping("/{tipoVeiculo}/buscar")
-    public List<DadosAnoVeiculo> buscarPorNome(
-            @PathVariable String tipoVeiculo,
-            @RequestParam String codMarca,
-            @RequestParam String codModelo,
-            @RequestParam String nome
-    ){
+    public List<DadosAnoVeiculo> buscarAnoPorNome(String tipoVeiculo, String codMarca, String codModelo, String nome){
         String endereco = URI + tipoVeiculo + "/marcas/" + codMarca + "/modelos/" + codModelo + "/anos";
 
         String json = consumoApi.obterDados(endereco);
