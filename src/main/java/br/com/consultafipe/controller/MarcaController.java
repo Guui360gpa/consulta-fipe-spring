@@ -26,11 +26,15 @@ public class MarcaController {
     private final String URI = "https://parallelum.com.br/fipe/api/v1/";
 
 
-    @GetMapping("/carro")
-    public Page<DadosMarca> listarMarcasCarro(@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+    @GetMapping("/{tipoVeiculo}")
+    public Page<DadosMarca> listarMarcasCarro(@PathVariable String tipoVeiculo,@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
 
-        String tipoVeiculo = "carros/marcas";
-        String json = consumoApi.obterDados(URI + tipoVeiculo);
+        if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
+        }
+
+        String endereco = URI + tipoVeiculo + "/marcas";
+        String json = consumoApi.obterDados(endereco);
 
         List<DadosMarca> veiculos = conversor.obterListaDeDados(json, DadosMarca.class);
 
@@ -47,52 +51,6 @@ public class MarcaController {
         int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
 
         return new PageImpl<>(veiculos.subList(inicio, fim), pageable, veiculos.size());
-    }
-
-    @GetMapping("/moto")
-    public Page<DadosMarca> listarMarcasMoto(@PageableDefault(size = 10,sort = "nome") Pageable pageable) {
-
-        String tipoVeiculo = "motos/marcas";
-        String json = consumoApi.obterDados(URI + tipoVeiculo);
-
-        List<DadosMarca> veiculos = conversor.obterListaDeDados(json, DadosMarca.class);
-
-        veiculos.sort(Comparator.comparing(DadosMarca::nome, String.CASE_INSENSITIVE_ORDER));
-
-        long offset = pageable.getOffset();
-
-        if (offset >= veiculos.size()) {
-            return new PageImpl<>(List.of(),pageable,veiculos.size());
-        }
-
-        int inicio = (int) offset;
-
-        int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
-
-        return new PageImpl<>(veiculos.subList(inicio,fim),pageable,veiculos.size());
-    }
-
-    @GetMapping("/caminhao")
-    public Page<DadosMarca> listarMarcasCaminhao(@PageableDefault(size = 10,sort = "nome") Pageable pageable) {
-
-        String tipoVeiculo = "caminhoes/marcas";
-        String json = consumoApi.obterDados(URI + tipoVeiculo);
-
-        List<DadosMarca> veiculos = conversor.obterListaDeDados(json, DadosMarca.class);
-
-        veiculos.sort(Comparator.comparing(DadosMarca::nome, String.CASE_INSENSITIVE_ORDER));
-
-        long offset = pageable.getOffset();
-
-        if (offset >= veiculos.size()) {
-            return new PageImpl<>(List.of(),pageable,veiculos.size());
-        }
-
-        int inicio = (int) offset;
-
-        int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
-
-        return new PageImpl<>(veiculos.subList(inicio,fim),pageable,veiculos.size());
     }
 
     @GetMapping("/{tipoVeiculo}/marcas/buscar")
