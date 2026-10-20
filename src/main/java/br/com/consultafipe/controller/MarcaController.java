@@ -3,6 +3,7 @@ package br.com.consultafipe.controller;
 import br.com.consultafipe.dto.DadosMarca;
 import br.com.consultafipe.service.ConsumoApi;
 import br.com.consultafipe.service.ConverterDados;
+import br.com.consultafipe.service.MarcaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -17,44 +18,23 @@ import java.util.List;
 import java.util.Locale;
 
 @RestController
-@RequestMapping("/modelos")
+@RequestMapping("/marcas")
 @RequiredArgsConstructor
 public class MarcaController {
 
+    private final MarcaService marcaService;
     private final ConsumoApi consumoApi;
     private final ConverterDados conversor;
     private final String URI = "https://parallelum.com.br/fipe/api/v1/";
 
 
     @GetMapping("/{tipoVeiculo}")
-    public Page<DadosMarca> listarMarcasCarro(@PathVariable String tipoVeiculo,@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
-
-        if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
-        }
-
-        String endereco = URI + tipoVeiculo + "/marcas";
-        String json = consumoApi.obterDados(endereco);
-
-        List<DadosMarca> veiculos = conversor.obterListaDeDados(json, DadosMarca.class);
-
-        veiculos.sort(Comparator.comparing(DadosMarca::nome, String.CASE_INSENSITIVE_ORDER));
-
-        long offset = pageable.getOffset();
-
-        if (offset >= veiculos.size()) {
-            return new PageImpl<>(List.of(), pageable, veiculos.size());
-        }
-
-        int inicio = (int) offset;
-
-        int fim = (int) Math.min(offset + pageable.getPageSize(), veiculos.size());
-
-        return new PageImpl<>(veiculos.subList(inicio, fim), pageable, veiculos.size());
+    public Page<DadosMarca> listar(@PathVariable String tipoVeiculo,@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+        return marcaService.listarMarcasEmOrdemAlfabetica(tipoVeiculo,pageable);
     }
 
     @GetMapping("/{tipoVeiculo}/marcas/buscar")
-    public List<DadosMarca> buscarMarcaPorNome(@PathVariable String tipoVeiculo, @RequestParam String nome){
+    public List<DadosMarca> buscarPorNome(@PathVariable String tipoVeiculo, @RequestParam String nome){
         if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
         }
