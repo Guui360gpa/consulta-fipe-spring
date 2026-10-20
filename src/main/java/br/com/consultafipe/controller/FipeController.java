@@ -3,6 +3,7 @@ package br.com.consultafipe.controller;
 import br.com.consultafipe.dto.DadosFipe;
 import br.com.consultafipe.service.ConsumoApi;
 import br.com.consultafipe.service.ConverterDados;
+import br.com.consultafipe.service.FipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class FipeController {
 
-    private final ConsumoApi consumoApi;
-    private final ConverterDados conversor;
-    private final String URI = "https://parallelum.com.br/fipe/api/v1/";
+    private final FipeService fipeService;
 
     @GetMapping("/{tipoVeiculo}")
     public DadosFipe consultar(
@@ -22,9 +21,6 @@ public class FipeController {
             @RequestParam String codModelo,
             @RequestParam String codAno
     ){
-        String endereco = URI + tipoVeiculo + "/marcas/" + codMarca + "/modelos/" + codModelo + "/anos/" + codAno;
-        String json = consumoApi.obterDados(endereco);
-
-        return conversor.obterDados(json, DadosFipe.class);
+        return fipeService.consultarFipe(tipoVeiculo,codMarca,codModelo,codAno);
     }
 }
