@@ -22,7 +22,7 @@ public class MarcaService {
     private final String URI = "https://parallelum.com.br/fipe/api/v1/";
 
     public Page<DadosMarca> listarMarcasEmOrdemAlfabetica(String tipoVeiculo, Pageable pageable){
-        if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
+        if (!tipoVeiculoValido(tipoVeiculo)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
         }
 
@@ -47,7 +47,7 @@ public class MarcaService {
     }
 
     public List<DadosMarca> buscarMarcasPorNome(String tipoVeiculo, String nome){
-        if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
+        if (!tipoVeiculoValido(tipoVeiculo)){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
         }
 
@@ -78,5 +78,10 @@ public class MarcaService {
                 ))
                 .limit(10)
                 .toList();
+    }
+
+    private boolean tipoVeiculoValido(String tipoVeiculo) {
+        return List.of("carros", "motos", "caminhoes")
+                .contains(tipoVeiculo);
     }
 }
