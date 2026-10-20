@@ -35,37 +35,7 @@ public class MarcaController {
 
     @GetMapping("/{tipoVeiculo}/marcas/buscar")
     public List<DadosMarca> buscarPorNome(@PathVariable String tipoVeiculo, @RequestParam String nome){
-        if (!List.of("carros, motos, caminhoes").contains(tipoVeiculo)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Tipo de veículo inválido");
-        }
-
-        String endereco = URI + tipoVeiculo + "/marcas";
-
-        String json = consumoApi.obterDados(endereco);
-
-        List<DadosMarca> marcas =
-                conversor.obterListaDeDados(
-                        json, DadosMarca.class
-                );
-
-        String pesquisa = nome.trim().toLowerCase(
-                Locale.ROOT
-        );
-
-        if (pesquisa.isEmpty()) {
-            return List.of();
-        }
-
-        return marcas.stream()
-                .filter(marca -> marca.nome()
-                        .toLowerCase(Locale.ROOT)
-                        .contains(pesquisa))
-                .sorted(Comparator.comparing(
-                        DadosMarca::nome,
-                        String.CASE_INSENSITIVE_ORDER
-                ))
-                .limit(10)
-                .toList();
+        return marcaService.buscarMarcasPorNome(tipoVeiculo,nome);
     }
 
 }
