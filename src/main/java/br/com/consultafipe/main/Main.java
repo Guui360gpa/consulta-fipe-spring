@@ -28,7 +28,7 @@ public class Main {
         var tipoVeiculo = read.nextLine();
 
         if(tipoVeiculo.equals("1")){
-            tipoVeiculo = "carros/marcas";
+            tipoVeiculo = "";
             json = consumoApi.obterDados(URI + tipoVeiculo);
         } else if (tipoVeiculo.equals("2")) {
             tipoVeiculo = "motos/marcas";
