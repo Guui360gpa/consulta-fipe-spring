@@ -1,191 +1,180 @@
-# 🚗 Consulta FIPE — API REST com Spring Boot
+# 🚗 Consulta FIPE — Full Stack | Java, Spring Boot, React e TypeScript
 
-API REST desenvolvida com **Java e Spring Boot** que consome a [API FIPE Parallelum](https://parallelum.com.br/fipe/api/v1/) para consultar informações e preços de veículos, incluindo **carros, motos e caminhões**.
+Aplicação web Full Stack desenvolvida com **Java, Spring Boot, React e TypeScript**, que permite consultar preços de veículos com base na Tabela FIPE, utilizando os dados disponibilizados pela [API FIPE Parallelum](https://parallelum.com.br/fipe/api/v1/).
 
-O projeto foi inicialmente desenvolvido como uma aplicação de linha de comando, com interação pelo terminal. Posteriormente, passou por uma **refatoração para uma arquitetura REST**, permitindo que as consultas sejam realizadas por meio de requisições HTTP.
+O projeto começou como uma aplicação de linha de comando e evoluiu para uma solução web completa, com **backend REST e frontend responsivo**, oferecendo uma experiência mais prática e intuitiva para consultar carros, motos e caminhões.
 
-A aplicação disponibiliza endpoints para consultar marcas, modelos, anos e valores FIPE, além de oferecer **paginação, ordenação alfabética e busca por nome**, facilitando sua futura integração com uma interface web.
+## 💻 Tecnologias utilizadas
 
-## 🛠️ Tecnologias utilizadas
+### Backend
+- Java 17+
+- Spring Boot
+- Spring Web
+- Spring Data Commons
+- Maven
+- Jackson
+- Lombok
+- API FIPE Parallelum
 
-- **Java 17+** — linguagem de programação
-- **Spring Boot** — desenvolvimento da API REST
-- **Spring Web** — criação dos controllers e endpoints HTTP
-- **Spring Data Commons** — paginação dos resultados
-- **Maven** — gerenciamento de dependências
-- **Jackson** — serialização e desserialização de JSON
-- **Lombok** — redução de código repetitivo
-- **API FIPE Parallelum** — fonte externa dos dados de veículos
+### Frontend
+- React
+- TypeScript
+- Vite
+- CSS
+- Lucide React
+- Fetch API
 
-## ⚙️ Funcionalidades
+### Ferramentas de desenvolvimento
+- IntelliJ IDEA
+- Visual Studio Code
+- Postman
+- Git e GitHub
 
-A API permite realizar as seguintes operações:
+## ✨ Funcionalidades
 
-### 🚘 Marcas
-- Listar marcas de carros, motos e caminhões.
-- Paginar os resultados.
-- Ordenar as marcas alfabeticamente.
-- Buscar marcas por nome, com correspondência parcial.
-- Limitar os resultados da busca para utilização em autocomplete.
+A aplicação oferece as seguintes funcionalidades:
 
-### 🚙 Modelos
-- Listar modelos de uma marca específica.
-- Paginar os modelos disponíveis.
-- Ordenar os resultados alfabeticamente.
-- Buscar modelos por nome dentro da marca selecionada.
-- Retornar até 10 sugestões por pesquisa.
+- Seleção do tipo de veículo: **carros, motos ou caminhões**.
+- Listagem de marcas em ordem alfabética.
+- Busca dinâmica de marcas com autocomplete.
+- Listagem de modelos conforme a marca selecionada.
+- Busca de modelos por nome.
+- Listagem de anos disponíveis para cada modelo.
+- Busca de anos e combustíveis.
+- Paginação dos resultados.
+- Consulta do valor FIPE do veículo selecionado.
+- Exibição da marca, modelo, ano, combustível e valor FIPE.
+- Interface responsiva para diferentes tamanhos de tela.
+- Comunicação entre frontend e backend por meio de requisições HTTP.
 
-### 📅 Anos
-- Listar os anos disponíveis para determinado modelo.
-- Paginar os resultados.
-- Buscar anos pelo nome, incluindo informações de combustível.
-- Retornar até 10 sugestões por pesquisa.
+## 🏗️ Arquitetura do projeto
 
-### 💰 Consulta FIPE
-- Consultar o valor FIPE de um veículo.
-- Retornar a marca e o modelo selecionados.
-- Informar o ano do veículo.
-- Exibir o tipo de combustível.
-- Retornar os dados em formato JSON.
+A aplicação foi desenvolvida com separação entre frontend e backend.
+
+```text
+                   USUÁRIO
+                      |
+                      v
+             FRONTEND (REACT)
+               TypeScript
+                      |
+                 HTTP / JSON
+                      |
+                      v
+           BACKEND (SPRING BOOT)
+                      |
+                Controllers
+                      |
+                  Services
+                      |
+             Consumo da API FIPE
+                      |
+                      v
+             API FIPE PARALLELUM
+                      |
+                 Dados FIPE
+                      |
+                      v
+              RESPOSTA EM JSON
+                      |
+                      v
+               FRONTEND REACT
+                      |
+                      v
+             RESULTADO NA TELA
+```
+
+### Backend — Spring Boot
+
+Responsável por receber as requisições HTTP, processar os parâmetros, consumir a API FIPE e retornar os dados em JSON.
+
+O backend está organizado em:
+
+- **Controllers:** definem os endpoints REST.
+- **Services:** concentram a lógica de negócio e o processamento das consultas.
+- **DTOs:** representam os dados transferidos entre a API externa e a aplicação, utilizando records Java.
+
+A aplicação não necessita de banco de dados para o fluxo principal, pois consulta diretamente a API FIPE.
+
+### Frontend — React + TypeScript
+
+Responsável pela interface visual e interação com o usuário.
+
+O frontend permite navegar entre as etapas da consulta, pesquisar informações, selecionar veículos e visualizar o resultado.
+
+O TypeScript contribui para a organização e segurança dos tipos de dados utilizados na comunicação com o backend.
 
 ## 📁 Estrutura do projeto
 
-A aplicação está organizada em pacotes com responsabilidades específicas:
+### Backend
 
 ```text
-src/main/java/br/com/consultafipe/
-│
-├── ConsultafipeApplication.java
-│
-├── controller/
-│   ├── MarcaController.java
-│   ├── ModeloController.java
-│   ├── AnoController.java
-│   └── FipeController.java
-│
-├── dto/
-│   ├── DadosMarca.java
-│   ├── DadosModelo.java
-│   ├── DadosItemModelo.java
-│   ├── DadosAnoVeiculo.java
-│   └── DadosFipe.java
-│
-└── service/
-    ├── ConsumoApi.java
-    └── ConverterDados.java
+backend/
+└── src/main/java/br/com/consultafipe/
+    ├── ConsultafipeApplication.java
+    ├── controller/
+    │   ├── MarcaController.java
+    │   ├── ModeloController.java
+    │   ├── AnoModeloController.java
+    │   └── FipeController.java
+    ├── service/
+    │   ├── MarcaService.java
+    │   ├── ModeloService.java
+    │   ├── AnoModeloService.java
+    │   ├── ConsumoApi.java
+    │   └── ConverterDados.java
+    └── dto/
+        ├── DadosMarca.java
+        ├── DadosModelo.java
+        ├── DadosItemModelo.java
+        ├── DadosAnoVeiculo.java
+        └── DadosFipe.java
 ```
 
-**Controller:** responsável por receber as requisições HTTP, processar os parâmetros e retornar as respostas.
+### Frontend
 
-**DTO:** utiliza records Java para representar os dados recebidos da API FIPE e enviados aos consumidores da aplicação.
-
-**Service:** contém os componentes responsáveis pelo consumo da API externa e pela conversão dos dados JSON em objetos Java.
-
-A aplicação não utiliza banco de dados, pois as informações são obtidas diretamente da API FIPE.
-
-## 🌐 Endpoints da API
-
-Os exemplos abaixo consideram a aplicação executando em `http://localhost:8080`.
-
-### 1. Listar marcas
-
-```http
-GET /marcas/{tipoVeiculo}
+```text
+consulta-fipe-frontend/
+├── src/
+│   ├── components/
+│   │   └── SelectionList.tsx
+│   ├── services/
+│   │   └── fipeApi.ts
+│   ├── types/
+│   │   └── fipe.ts
+│   ├── App.tsx
+│   ├── main.tsx
+│   └── styles.css
+├── package.json
+├── vite.config.ts
+└── index.html
 ```
 
-Retorna as marcas disponíveis para o tipo de veículo informado, com paginação.
+*As estruturas representam a organização dos projetos. Os nomes das pastas principais podem variar conforme a configuração do repositório.*
 
-**Exemplo:**
+## 🌐 Endpoints da API REST
 
-```http
-GET http://localhost:8080/marcas/carros?page=0&size=10
-```
+O backend disponibiliza os seguintes endpoints:
 
-### 2. Buscar marcas por nome
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/marcas/{tipoVeiculo}` | Listar marcas |
+| GET | `/marcas/{tipoVeiculo}/buscar` | Buscar marcas por nome |
+| GET | `/modelos/{tipoVeiculo}/{codMarca}` | Listar modelos |
+| GET | `/modelos/{tipoVeiculo}/buscar` | Buscar modelos por nome |
+| GET | `/anos/{tipoVeiculo}` | Listar anos |
+| GET | `/anos/{tipoVeiculo}/buscar` | Buscar anos por nome |
+| GET | `/fipe/{tipoVeiculo}` | Consultar valor FIPE |
 
-```http
-GET /marcas/{tipoVeiculo}/buscar?nome={nome}
-```
+Os endpoints de listagem oferecem paginação, enquanto as buscas por nome permitem implementar o autocomplete no frontend.
 
-Realiza uma busca parcial pelo nome da marca.
-
-**Exemplo:**
-
-```http
-GET http://localhost:8080/marcas/carros/buscar?nome=vol
-```
-
-### 3. Listar modelos
-
-```http
-GET /modelos/{tipoVeiculo}/{codMarca}
-```
-
-Retorna os modelos disponíveis para uma marca específica, com paginação.
-
-**Exemplo:**
-
-```http
-GET http://localhost:8080/modelos/carros/59?page=0&size=10
-```
-
-### 4. Buscar modelos por nome
-
-```http
-GET /modelos/{tipoVeiculo}/buscar?cod={codMarca}&nome={nome}
-```
-
-Busca modelos pelo nome, considerando a marca selecionada.
-
-**Exemplo:**
-
-```http
-GET http://localhost:8080/modelos/carros/buscar?cod=59&nome=gol
-```
-
-### 5. Listar anos
-
-```http
-GET /anos/{tipoVeiculo}?codMarca={codMarca}&codModelo={codModelo}
-```
-
-Retorna os anos disponíveis para um modelo específico.
-
-**Exemplo:**
-
-```http
-GET http://localhost:8080/anos/carros?codMarca=59&codModelo=5940&page=0&size=10
-```
-
-### 6. Buscar anos por nome
-
-```http
-GET /anos/{tipoVeiculo}/buscar?codMarca={codMarca}&codModelo={codModelo}&nome={nome}
-```
-
-Permite pesquisar os anos disponíveis para determinado modelo.
-
-**Exemplo:**
-
-```http
-GET http://localhost:8080/anos/carros/buscar?codMarca=59&codModelo=5940&nome=2020
-```
-
-### 7. Consultar valor FIPE
-
-```http
-GET /fipe/{tipoVeiculo}?codMarca={codMarca}&codModelo={codModelo}&codAno={codAno}
-```
-
-Retorna as informações e o valor FIPE do veículo selecionado.
-
-**Exemplo:**
+### Exemplo de consulta FIPE
 
 ```http
 GET http://localhost:8080/fipe/carros?codMarca=59&codModelo=5940&codAno=2020-1
 ```
 
-**Exemplo ilustrativo de resposta:**
+**Exemplo ilustrativo de resposta JSON:**
 
 ```json
 {
@@ -197,101 +186,182 @@ GET http://localhost:8080/fipe/carros?codMarca=59&codModelo=5940&codAno=2020-1
 }
 ```
 
-Os códigos utilizados nas consultas devem corresponder a combinações válidas retornadas pela API FIPE. Os valores apresentados são apenas exemplos.
+Os valores e códigos devem corresponder aos dados reais disponibilizados pela API FIPE.
 
-## ▶️ Como executar
+## 🚀 Como executar o projeto
 
 ### Pré-requisitos
 
-- Java 17 ou superior
-- Maven
+Antes de iniciar, certifique-se de possuir:
+
+- JDK 17 ou superior
+- Node.js compatível com o Vite
+- npm
+- Maven ou Maven Wrapper
 - Git
 - Conexão com a internet
 
 ### 1. Clonar o repositório
 
 ```bash
-git clone https://github.com/SEU_USUARIO/consulta-fipe-spring.git
+git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
 ```
 
-### 2. Acessar o diretório
+Acesse a pasta do projeto:
 
 ```bash
-cd consulta-fipe-spring
+cd SEU_REPOSITORIO
 ```
 
-### 3. Executar a aplicação
+### 2. Executar o backend
 
-```bash
-mvn spring-boot:run
+Abra a pasta do backend no IntelliJ IDEA ou utilize o terminal.
+
+No Windows, caso o projeto tenha Maven Wrapper:
+
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
-Após a inicialização, a API estará disponível, por padrão, em:
+Ou execute a classe principal `ConsultafipeApplication.java` pela IDE.
+
+Por padrão, o backend estará disponível em:
 
 ```text
 http://localhost:8080
 ```
 
-### 4. Testar os endpoints
+### 3. Executar o frontend
 
-Utilize o **Postman**, Insomnia ou outra ferramenta de requisições HTTP para consultar os endpoints disponíveis.
+Abra outro terminal e acesse a pasta do frontend:
 
-Todas as consultas apresentadas utilizam o método HTTP `GET`.
+```powershell
+cd consulta-fipe-frontend
+```
 
-## 🔄 Fluxo de funcionamento
+Instale as dependências:
 
-O processo de consulta segue as etapas:
+```powershell
+npm install
+```
 
-1. **Tipo de veículo:** escolha entre carros, motos ou caminhões.
-2. **Marca:** consulte as marcas disponíveis e selecione uma.
-3. **Modelo:** consulte os modelos associados à marca escolhida.
-4. **Ano:** selecione um dos anos disponíveis para o modelo.
-5. **Consulta FIPE:** envie os códigos selecionados para obter o valor e as informações do veículo.
+Inicie o servidor de desenvolvimento:
 
-A API recebe a requisição HTTP, consulta os dados na API FIPE Parallelum, converte a resposta JSON em objetos Java e retorna as informações ao cliente.
+```powershell
+npm run dev
+```
 
-## 🔧 Refatoração e evolução do projeto
+Caso o PowerShell bloqueie o comando `npm`, utilize `npm.cmd` no lugar de `npm`.
 
-O projeto passou por uma mudança importante em sua estrutura e funcionamento.
+Por padrão, o frontend estará disponível em:
 
-**Versão inicial — aplicação de linha de comando**
+```text
+http://localhost:5173
+```
 
-- Interação diretamente pelo terminal.
-- Menu para seleção do tipo de veículo.
-- Escolha de marcas, modelos e anos por meio de entradas do usuário.
-- Exibição das informações e do valor FIPE no console.
+### 4. Acessar a aplicação
 
-**Versão atual — API REST**
+Abra o navegador e acesse:
 
-- Substituição do fluxo interativo no terminal por endpoints HTTP.
-- Separação das funcionalidades em controllers.
+**http://localhost:5173**
+
+Mantenha os servidores do frontend e backend executando simultaneamente.
+
+## 🔗 Integração entre frontend e backend
+
+O frontend realiza requisições HTTP ao backend por meio da Fetch API.
+
+As chamadas estão centralizadas no arquivo:
+
+```text
+src/services/fipeApi.ts
+```
+
+Durante o desenvolvimento, o Vite utiliza um proxy para encaminhar requisições iniciadas por `/api` ao Spring Boot.
+
+Exemplo de configuração:
+
+```typescript
+server: {
+  port: 5173,
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/api/, ''),
+    },
+  },
+}
+```
+
+Assim, o frontend pode realizar uma chamada como:
+
+```text
+/api/marcas/carros
+```
+
+E o Vite encaminha a requisição ao backend:
+
+```text
+http://localhost:8080/marcas/carros
+```
+
+Essa configuração facilita a integração local entre React e Spring Boot.
+
+## 🔄 Evolução do projeto
+
+### Versão inicial — Aplicação de terminal
+
+O projeto começou com uma interface de linha de comando, na qual o usuário selecionava o veículo e visualizava as informações diretamente no console.
+
+### Refatoração — API REST
+
+A aplicação passou por uma refatoração para separar responsabilidades e disponibilizar as funcionalidades por meio de endpoints HTTP.
+
+As principais mudanças foram:
+
+- Criação de controllers REST.
+- Separação da lógica de negócio em services.
 - Utilização de DTOs com records Java.
-- Implementação de paginação para listagens.
-- Implementação de buscas por nome para autocomplete.
-- Retorno dos dados em formato JSON.
-- Estrutura preparada para integração com um frontend.
+- Implementação de paginação e ordenação.
+- Criação de buscas dinâmicas para marcas, modelos e anos.
 
-Essa refatoração tornou a aplicação mais adequada para ser consumida por outros sistemas e interfaces web, além de proporcionar maior organização e separação de responsabilidades.
+### Versão atual — Aplicação Full Stack
 
-## 🚀 Próximos passos
+Com a implementação do frontend em React e TypeScript, o projeto passou a oferecer uma interface gráfica integrada ao backend.
 
-O próximo objetivo é desenvolver uma **interface web** para consumir os endpoints da API, permitindo que o usuário selecione o tipo de veículo, marca, modelo e ano de forma visual e consulte o valor FIPE sem precisar utilizar o Postman.
+O usuário pode realizar todo o fluxo de consulta diretamente pelo navegador, sem precisar utilizar o terminal ou ferramentas como Postman.
 
 ## 📚 Aprendizados
 
-Durante o desenvolvimento e a refatoração deste projeto, foram trabalhados conceitos como:
+O desenvolvimento deste projeto proporcionou a aplicação prática de conceitos importantes de desenvolvimento Full Stack:
 
-- Consumo de APIs REST externas com Java.
-- Criação de endpoints utilizando Spring Boot.
-- Manipulação de requisições e parâmetros HTTP.
-- Conversão de JSON utilizando Jackson.
-- Utilização de records para transferência de dados.
-- Paginação de coleções utilizando `Pageable` e `PageImpl`.
-- Manipulação de listas com Stream API.
-- Implementação de buscas com filtros e ordenação.
-- Organização do código em camadas.
-- Refatoração de uma aplicação de terminal para uma API REST.
+- Desenvolvimento de APIs REST com Spring Boot.
+- Consumo de APIs externas.
+- Organização do backend em controllers, services e DTOs.
+- Serialização e desserialização JSON.
+- Utilização de Java Streams.
+- Paginação com Spring Data Commons.
+- Desenvolvimento de interfaces com React.
+- Tipagem de dados com TypeScript.
+- Gerenciamento de estados e componentes.
+- Requisições HTTP com Fetch API.
+- Integração entre frontend e backend.
+- Configuração de proxy com Vite.
+- Refatoração e evolução de projetos.
+
+## 🔮 Melhorias futuras
+
+- Publicação da aplicação na internet.
+- Aprimoramento da experiência de usuário.
+- Implementação de testes automatizados.
+
+## 👨‍💻 Autor
+
+**Guilherme Paiva Alves**
+
+Desenvolvido como projeto de estudo e prática em desenvolvimento Full Stack com Java, Spring Boot, React e TypeScript.
 
 ---
 
-**Projeto desenvolvido com Java e Spring Boot para praticar desenvolvimento backend, consumo de APIs externas e construção de APIs REST.**
+⭐ Se este projeto foi útil ou interessante, considere deixar uma estrela no repositório!
