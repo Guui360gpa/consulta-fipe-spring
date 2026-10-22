@@ -1,8 +1,6 @@
 package br.com.consultafipe.controller;
 
 import br.com.consultafipe.dto.DadosFipe;
-import br.com.consultafipe.service.ConsumoApi;
-import br.com.consultafipe.service.ConverterDados;
 import br.com.consultafipe.service.FipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -22,7 +22,7 @@ public class MarcaController {
         return marcaService.listarMarcasEmOrdemAlfabetica(tipoVeiculo,pageable);
     }
 
-    @GetMapping("/{tipoVeiculo}/marcas/buscar")
+    @GetMapping("/{tipoVeiculo}/buscar")
     public List<DadosMarca> buscarPorNome(@PathVariable String tipoVeiculo, @RequestParam String nome){
         return marcaService.buscarMarcasPorNome(tipoVeiculo,nome);
     }

@@ -17,12 +17,12 @@ public class ModeloController {
 
     private final ModeloService modeloService;
 
-    @GetMapping("/{tipoVeiculo}")
+    @GetMapping("/{tipoVeiculo}/{codMarca}")
     public Page<DadosItemModelo> listar(@PathVariable String tipoVeiculo,
-                                    @RequestParam String cod,
+                                    @PathVariable String codMarca,
                                     @PageableDefault(size = 10, sort="nome")Pageable pageable){
 
-      return modeloService.listarModelosEmOrdemAlfabetica(tipoVeiculo,cod,pageable);
+      return modeloService.listarModelosEmOrdemAlfabetica(tipoVeiculo,codMarca,pageable);
     }
 
     @GetMapping("/{tipoVeiculo}/buscar")
